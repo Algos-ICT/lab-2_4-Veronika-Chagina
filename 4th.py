@@ -37,17 +37,3 @@ with open('input.txt', 'r') as f:
 
 
 print('Время работы: %s секунд' % (time.perf_counter() - t_start))
-'''
-trololo
-4
-0 0 7
-2 4 3
-3 5 1
-1 3 2
-
-expected result:
-Yes
-Yes
-Yes
-No
-'''
