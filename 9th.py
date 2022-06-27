@@ -4,13 +4,14 @@ def prefix_function(S):
     while i < len(S):
         if S[i] == S[j]:
             p[i+1] = j + 1
-i += 1
-j += 1 else:
+            i += 1
+            j += 1 
+        else:
             if j > 0:
                 j = p[j]
             else:
                 p[i+1] = 0
-i += 1
+                i += 1
     return p
 def decomposition(S):
     p = prefix_function(S)
@@ -22,9 +23,9 @@ def decomposition(S):
             ln = mx_ind - mx_val
             mult = mx_ind // ln
             if mult > 1:
-result.append(S[:ln] + "*" + str(mult))
+                result.append(S[:ln] + "*" + str(mult))
 
-             else: result.append(S[:ln])
+            else: result.append(S[:ln])
             S = S[mx_ind:]
         else:
             last = result[-1] if result else None
