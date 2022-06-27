@@ -1,62 +1,42 @@
-import sys
+def prefix_function(S):
+    p = [0]*(len(S)+1)
+    i, j = 1, 0
+    while i < len(S):
+        if S[i] == S[j]:
+            p[i+1] = j + 1
+i += 1
+j += 1 else:
+            if j > 0:
+                j = p[j]
+            else:
+                p[i+1] = 0
+i += 1
+    return p
+def decomposition(S):
+    p = prefix_function(S)
+    result = []
+    while len(p) != 1:
+        mx_val = max(p)
+        mx_ind = p.index(mx_val)
+        if max(p) != 0:
+            ln = mx_ind - mx_val
+            mult = mx_ind // ln
+            if mult > 1:
+result.append(S[:ln] + "*" + str(mult))
 
-
-def z_function(s):
-    n = len(s)
-    z = [0] * n
-    l = r = 0
-    for i in range(1, n):
-        if i <= r:
-            z[i] = min(z[i - l], r - i + 1)
-        while i + z[i] < n and s[i + z[i]] == s[z[i]]:
-            z[i] += 1
-        if i + z[i] > r:
-            l, r = i, i + z[i] - 1
-    return z
-
-
-def step(ln, k, prev):
-    res = k + 2 + len(str(ln // k))
-    if ln == k:
-        res -= 2
-    if prev == n:
-        res -= 1
-    return res
-
-
-sys.stdin = open('input.txt', "r")
-s = input()
-n = len(s)
-s += '_'
-dp = [n - i for i in range(n + 1)]
-to = [[n - i, n - i] for i in range(n + 1)]
-for i in range(n - 2, -1, -1):
-    z = z_function(s[i:])
-    if dp[i] > dp[i + 1] + 2:
-        dp[i] = dp[i + 1] + 2
-        to[i] = [1, 1]
-    for j in range(i + 1, n + 1):
-        k = 1
-        while k * k <= j - i:
-            if (j - i) % k:
-                k += 1
-                continue
-            if z[k] + k >= j - i:
-                if dp[i] > dp[j] + step(j - i, k, j):
-                    dp[i] = dp[j] + step(j - i, k, j)
-                    to[i] = [j - i, k]
-            if z[(j - i) // k] + (j - i) // k >= j - i:
-                if dp[i] > dp[j] + step(j - i, (j - i) // k, j):
-                    dp[i] = dp[j] + step(j - i, (j - i) // k, j)
-                    to[i] = [j - i, (j - i) // k]
-            k += 1
-
-with open('output.txt', 'w') as f_out:
-    i = 0
-    while i < n:
-        if i > 0:
-            f_out.writelines('+')
-        f_out.writelines(s[i: i + to[i][1]])
-        if to[i][0] != to[i][1]:
-            f_out.writelines('*' + str(to[i][0] // to[i][1]))
-        i += to[i][0]
+             else: result.append(S[:ln])
+            S = S[mx_ind:]
+        else:
+            last = result[-1] if result else None
+            if last and '*' not in last:
+                result[-1] = last + S[0]
+            else:
+                result.append(S[0])
+            S = S[1:]
+        p = prefix_function(S)
+    return result
+with open('input.txt') as f:
+    s = f.readline().strip()
+decomposed = "+".join(decomposition(s))
+word = decomposed if len(decomposed) < len(s) else s
+print(word)
